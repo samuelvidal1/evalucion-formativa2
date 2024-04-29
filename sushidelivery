@@ -1,0 +1,79 @@
+# Definición de los precios de los rolls
+precios = {
+    "Pikachu Roll": 4500,
+    "Otaku Roll": 5000,
+    "Pulpo Venenoso Roll": 5200,
+    "Anguila Eléctrica Roll": 4800
+}
+
+# Función para mostrar el menú y obtener la selección del usuario
+def mostrar_menu():
+    print("Menú:")
+    print("1. Pikachu Roll - $4500")
+    print("2. Otaku Roll - $5000")
+    print("3. Pulpo Venenoso Roll - $5200")
+    print("4. Anguila Eléctrica Roll - $4800")
+    print("X. Terminar pedido")
+
+    seleccion = input("Seleccione una opción del menú: ")
+    return seleccion
+
+# Función para procesar el pedido del usuario
+def procesar_pedido():
+    pedido = []
+    while True:
+        seleccion = mostrar_menu()
+        if seleccion.upper() == "X":
+            break
+        elif seleccion in ["1", "2", "3", "4"]:
+            roll = int(seleccion)
+            cantidad = int(input("Ingrese la cantidad: "))
+            pedido.append((roll, cantidad))
+        else:
+            print("Opción no válida. Por favor, seleccione una opción del menú.")
+
+    return pedido
+
+# Función para aplicar el descuento si el usuario tiene un código válido
+def aplicar_descuento(total):
+    codigo_descuento = input("¿Tiene un código de descuento? Ingrese el código o 'X' para continuar sin descuento: ")
+    if codigo_descuento == "soyotaku":
+        total_descuento = total * 0.9
+        print("Descuento aplicado: 10%")
+        return total_descuento
+    elif codigo_descuento == "X":
+        return total
+    else:
+        print("Código no válido.")
+        decision = input("¿Desea reingresar el código (R) o continuar sin descuento (C)? ")
+        if decision.upper() == "R":
+            return aplicar_descuento(total)
+        else:
+            return total
+
+# Función para mostrar el detalle del pedido
+def mostrar_detalle(pedido):
+    print("\nDetalle del pedido:")
+    total = 0
+    for roll, cantidad in pedido:
+        nombre_roll = list(precios.keys())[roll - 1]
+        precio_roll = precios[nombre_roll]
+        total += precio_roll * cantidad
+        print(f"{cantidad} x {nombre_roll} - ${precio_roll * cantidad}")
+    print(f"Total a pagar: ${total}")
+    total_con_descuento = aplicar_descuento(total)
+    if total_con_descuento != total:
+        print(f"Total con descuento: ${total_con_descuento}")
+
+# Función principal
+def main():
+    while True:
+        print("\n¡Bienvenido al delivery de Sushi!")
+        pedido = procesar_pedido()
+        mostrar_detalle(pedido)
+        decision = input("\n¿Desea realizar otro pedido (S/N)? ")
+        if decision.upper() != "S":
+            break
+
+if __name__ == "__main__":
+    main()
